@@ -3,8 +3,8 @@
 import json
 from typing import Any, Dict
 
-from .base import AgentResponse, AgentRole, AgentStatus, BaseAgent
 from ..prompts.templates import get_agent_prompt
+from .base import AgentResponse, AgentRole, AgentStatus, BaseAgent
 
 
 class NeedsAnalysisAgent(BaseAgent):
@@ -52,7 +52,8 @@ class NeedsAnalysisAgent(BaseAgent):
             analysis_instruction = f"""
 User request: {user_message}
 
-Please analyze this request and determine if you have enough information to create a structured shopping goal.
+Please analyze this request and determine if you have enough information
+to create a structured shopping goal.
 
 If you need more information, respond with a natural follow-up question.
 

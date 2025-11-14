@@ -1,9 +1,8 @@
 """Mock tools for testing agents without real API integrations."""
 
 import asyncio
-import json
 import random
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from ..agents.base import Tool
 
@@ -165,8 +164,7 @@ class MockProductSearchTool(Tool):
             if required_features:
                 product_features_lower = [f.lower() for f in product["features"]]
                 has_required = any(
-                    feat.lower() in " ".join(product_features_lower)
-                    for feat in required_features
+                    feat.lower() in " ".join(product_features_lower) for feat in required_features
                 )
                 if not has_required:
                     continue

@@ -1,9 +1,10 @@
 """Tests for Transaction Agent."""
 
-import pytest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 
-from src.shopping_concierge.agents import TransactionAgent, AgentStatus
+import pytest
+
+from src.shopping_concierge.agents import AgentStatus, TransactionAgent
 from tests.fixtures.mock_data import get_mock_products, get_mock_shipping_address
 
 
@@ -43,9 +44,7 @@ class TestTransactionAgent:
             assert "order_summary" in response.output
             assert response.output["requires_approval"] is True
 
-    async def test_prepare_order_calculates_costs(
-        self, agent: TransactionAgent
-    ) -> None:
+    async def test_prepare_order_calculates_costs(self, agent: TransactionAgent) -> None:
         """Test that order preparation calculates costs correctly."""
         with patch.object(agent, "_call_claude", return_value="Order summary"):
             products = [
@@ -76,9 +75,7 @@ class TestTransactionAgent:
             assert summary["shipping"] == 0.0  # Free over $50
             assert summary["total"] == 216.0
 
-    async def test_prepare_order_includes_shipping_cost(
-        self, agent: TransactionAgent
-    ) -> None:
+    async def test_prepare_order_includes_shipping_cost(self, agent: TransactionAgent) -> None:
         """Test that shipping is charged for orders under $50."""
         with patch.object(agent, "_call_claude", return_value="Order summary"):
             products = [
@@ -100,9 +97,7 @@ class TestTransactionAgent:
             summary = response.output["order_summary"]
             assert summary["shipping"] == 5.99
 
-    async def test_execute_order_without_approval(
-        self, agent: TransactionAgent
-    ) -> None:
+    async def test_execute_order_without_approval(self, agent: TransactionAgent) -> None:
         """Test that order execution requires approval."""
         input_data = {
             "action": "execute",

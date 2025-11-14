@@ -1,9 +1,10 @@
 """Tests for Comparison Agent."""
 
-import pytest
 from unittest.mock import patch
 
-from src.shopping_concierge.agents import ComparisonAgent, AgentStatus
+import pytest
+
+from src.shopping_concierge.agents import AgentStatus, ComparisonAgent
 from tests.fixtures.mock_data import get_mock_products, get_mock_shopping_criteria
 
 
@@ -87,9 +88,7 @@ class TestComparisonAgent:
         with pytest.raises(ValueError, match="must contain 'products'"):
             await agent.process(input_data)
 
-    async def test_process_invalid_products_type(
-        self, agent: ComparisonAgent
-    ) -> None:
+    async def test_process_invalid_products_type(self, agent: ComparisonAgent) -> None:
         """Test processing with invalid products type."""
         input_data = {"products": "invalid"}
 
@@ -105,9 +104,7 @@ class TestComparisonAgent:
         assert len(result["ranked_products"]) <= 2
         assert "top_recommendation" in result
 
-    async def test_fallback_ranking_sorts_correctly(
-        self, agent: ComparisonAgent
-    ) -> None:
+    async def test_fallback_ranking_sorts_correctly(self, agent: ComparisonAgent) -> None:
         """Test that fallback ranking sorts by rating and price."""
         products = [
             {"product_id": "1", "name": "Low rating", "rating": 3.0, "price": 50.0},

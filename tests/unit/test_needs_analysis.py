@@ -1,12 +1,13 @@
 """Tests for Needs Analysis Agent."""
 
-import pytest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 
-from src.shopping_concierge.agents import NeedsAnalysisAgent, AgentStatus
+import pytest
+
+from src.shopping_concierge.agents import AgentStatus, NeedsAnalysisAgent
 from tests.fixtures.mock_data import (
-    get_mock_user_message,
     get_mock_conversation_history,
+    get_mock_user_message,
 )
 
 
@@ -46,9 +47,7 @@ class TestNeedsAnalysisAgent:
             assert response.output["ready"] is True
             assert "product_category" in response.output
 
-    async def test_process_with_conversation_history(
-        self, agent: NeedsAnalysisAgent
-    ) -> None:
+    async def test_process_with_conversation_history(self, agent: NeedsAnalysisAgent) -> None:
         """Test processing with conversation history."""
         with patch.object(
             agent,
@@ -73,18 +72,14 @@ class TestNeedsAnalysisAgent:
         with pytest.raises(ValueError, match="cannot be empty"):
             await agent.process(input_data)
 
-    async def test_process_missing_user_message(
-        self, agent: NeedsAnalysisAgent
-    ) -> None:
+    async def test_process_missing_user_message(self, agent: NeedsAnalysisAgent) -> None:
         """Test processing without user_message raises error."""
         input_data = {}
 
         with pytest.raises(ValueError, match="must contain 'user_message'"):
             await agent.process(input_data)
 
-    async def test_process_handles_claude_error(
-        self, agent: NeedsAnalysisAgent
-    ) -> None:
+    async def test_process_handles_claude_error(self, agent: NeedsAnalysisAgent) -> None:
         """Test handling Claude API errors."""
         with patch.object(
             agent,
@@ -98,9 +93,7 @@ class TestNeedsAnalysisAgent:
             assert response.status == AgentStatus.FAILED
             assert len(response.errors) > 0
 
-    async def test_parse_response_with_json(
-        self, agent: NeedsAnalysisAgent
-    ) -> None:
+    async def test_parse_response_with_json(self, agent: NeedsAnalysisAgent) -> None:
         """Test parsing response with valid JSON."""
         response = '{"ready": true, "product_category": "shoes"}'
         result = agent._parse_response(response)
@@ -108,9 +101,7 @@ class TestNeedsAnalysisAgent:
         assert result["ready"] is True
         assert result["product_category"] == "shoes"
 
-    async def test_parse_response_without_json(
-        self, agent: NeedsAnalysisAgent
-    ) -> None:
+    async def test_parse_response_without_json(self, agent: NeedsAnalysisAgent) -> None:
         """Test parsing response without JSON."""
         response = "What type of shoes are you looking for?"
         result = agent._parse_response(response)

@@ -3,9 +3,9 @@
 import json
 from typing import Any, Dict, List
 
-from .base import AgentResponse, AgentRole, AgentStatus, BaseAgent, Tool
 from ..prompts.templates import get_agent_prompt
 from ..tools.mock_tools import MockCheckoutTool
+from .base import AgentResponse, AgentRole, AgentStatus, BaseAgent, Tool
 
 
 class TransactionAgent(BaseAgent):
@@ -87,10 +87,7 @@ class TransactionAgent(BaseAgent):
         shipping_address = input_data.get("shipping_address", {})
 
         # Calculate costs
-        subtotal = sum(
-            p.get("price", 0) * p.get("quantity", 1)
-            for p in products
-        )
+        subtotal = sum(p.get("price", 0) * p.get("quantity", 1) for p in products)
         tax = subtotal * 0.08  # 8% tax
         shipping = 0.0 if subtotal > 50 else 5.99
         total = subtotal + tax + shipping
@@ -237,9 +234,7 @@ Create a 3-4 sentence summary that:
         messages = [{"role": "user", "content": prompt}]
         return await self._call_claude(messages, max_tokens=500)
 
-    async def _generate_confirmation(
-        self, checkout_result: Dict[str, Any]
-    ) -> str:
+    async def _generate_confirmation(self, checkout_result: Dict[str, Any]) -> str:
         """
         Generate order confirmation message using Claude.
 

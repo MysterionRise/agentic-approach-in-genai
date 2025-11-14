@@ -1,9 +1,10 @@
 """Tests for Deal-Finding Agent."""
 
-import pytest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 
-from src.shopping_concierge.agents import DealFindingAgent, AgentStatus
+import pytest
+
+from src.shopping_concierge.agents import AgentStatus, DealFindingAgent
 from tests.fixtures.mock_data import get_mock_products
 
 
@@ -50,9 +51,7 @@ class TestDealFindingAgent:
         assert "coupons" in deal_info
         assert "price_history" in deal_info
 
-    async def test_calculate_savings_with_percentage(
-        self, agent: DealFindingAgent
-    ) -> None:
+    async def test_calculate_savings_with_percentage(self, agent: DealFindingAgent) -> None:
         """Test calculating savings with percentage coupon."""
         coupons = ["SAVE15 - 15% off"]
         current_price = 100.0
@@ -63,9 +62,7 @@ class TestDealFindingAgent:
         assert savings["percentage"] == 15.0
         assert savings["final_price"] == 85.0
 
-    async def test_calculate_savings_with_dollar_amount(
-        self, agent: DealFindingAgent
-    ) -> None:
+    async def test_calculate_savings_with_dollar_amount(self, agent: DealFindingAgent) -> None:
         """Test calculating savings with dollar amount coupon."""
         coupons = ["SAVE20 - $20 off"]
         current_price = 100.0
@@ -75,9 +72,7 @@ class TestDealFindingAgent:
         assert savings["amount"] == 20.0
         assert savings["final_price"] == 80.0
 
-    async def test_calculate_savings_no_coupons(
-        self, agent: DealFindingAgent
-    ) -> None:
+    async def test_calculate_savings_no_coupons(self, agent: DealFindingAgent) -> None:
         """Test calculating savings with no coupons."""
         coupons = []
         current_price = 100.0
@@ -115,9 +110,7 @@ class TestDealFindingAgent:
         with pytest.raises(ValueError, match="must contain 'products'"):
             await agent.process(input_data)
 
-    async def test_process_invalid_products_type(
-        self, agent: DealFindingAgent
-    ) -> None:
+    async def test_process_invalid_products_type(self, agent: DealFindingAgent) -> None:
         """Test processing with invalid products type."""
         input_data = {"products": "invalid"}
 

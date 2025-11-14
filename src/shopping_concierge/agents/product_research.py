@@ -3,9 +3,9 @@
 import json
 from typing import Any, Dict, List
 
-from .base import AgentResponse, AgentRole, AgentStatus, BaseAgent, Tool
 from ..prompts.templates import get_agent_prompt
 from ..tools.mock_tools import MockProductSearchTool
+from .base import AgentResponse, AgentRole, AgentStatus, BaseAgent, Tool
 
 
 class ProductResearchAgent(BaseAgent):

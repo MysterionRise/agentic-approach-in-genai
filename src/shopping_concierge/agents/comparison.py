@@ -3,8 +3,8 @@
 import json
 from typing import Any, Dict, List
 
-from .base import AgentResponse, AgentRole, AgentStatus, BaseAgent
 from ..prompts.templates import get_agent_prompt
+from .base import AgentResponse, AgentRole, AgentStatus, BaseAgent
 
 
 class ComparisonAgent(BaseAgent):
@@ -54,9 +54,7 @@ class ComparisonAgent(BaseAgent):
                 )
 
             # Generate comparison and recommendations using Claude
-            comparison_result = await self._compare_and_recommend(
-                products, criteria, top_n
-            )
+            comparison_result = await self._compare_and_recommend(products, criteria, top_n)
 
             self.set_status(AgentStatus.COMPLETED)
 
@@ -191,7 +189,10 @@ Provide ONLY the JSON object, no additional text.
                     "name": product.get("name"),
                     "rank": i,
                     "score": product.get("rating", 0) * 2,  # Scale to 10
-                    "rationale": f"High rating ({product.get('rating')}) at ${product.get('price')}",
+                    "rationale": (
+                        f"High rating ({product.get('rating')}) "
+                        f"at ${product.get('price')}"
+                    ),
                     "pros": product.get("features", [])[:3],
                     "cons": ["Limited analysis available"],
                     "best_for": "Users prioritizing rating and value",

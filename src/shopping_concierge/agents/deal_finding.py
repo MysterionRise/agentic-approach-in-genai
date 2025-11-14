@@ -3,9 +3,9 @@
 import json
 from typing import Any, Dict, List
 
-from .base import AgentResponse, AgentRole, AgentStatus, BaseAgent, Tool
 from ..prompts.templates import get_agent_prompt
 from ..tools.mock_tools import MockCouponTool, MockPriceHistoryTool
+from .base import AgentResponse, AgentRole, AgentStatus, BaseAgent, Tool
 
 
 class DealFindingAgent(BaseAgent):
@@ -96,9 +96,7 @@ class DealFindingAgent(BaseAgent):
         coupon_tool = next((t for t in self.tools if t.name == "coupon_search"), None)
         coupons_result = {}
         if coupon_tool:
-            coupons_result = await coupon_tool.execute(
-                brand=brand, product_id=product_id
-            )
+            coupons_result = await coupon_tool.execute(brand=brand, product_id=product_id)
 
         # Get price history
         price_tool = next((t for t in self.tools if t.name == "price_history"), None)
@@ -122,9 +120,7 @@ class DealFindingAgent(BaseAgent):
             ),
         }
 
-    def _calculate_savings(
-        self, current_price: float, coupons: List[str]
-    ) -> Dict[str, Any]:
+    def _calculate_savings(self, current_price: float, coupons: List[str]) -> Dict[str, Any]:
         """
         Calculate potential savings from coupons.
 

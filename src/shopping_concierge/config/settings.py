@@ -1,8 +1,5 @@
 """Configuration settings for the Shopping Concierge application."""
 
-import os
-from typing import Optional
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 

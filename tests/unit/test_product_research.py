@@ -1,11 +1,11 @@
 """Tests for Product Research Agent."""
 
-import pytest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 
-from src.shopping_concierge.agents import ProductResearchAgent, AgentStatus
-from src.shopping_concierge.tools import MockProductSearchTool
-from tests.fixtures.mock_data import get_mock_shopping_criteria, get_mock_products
+import pytest
+
+from src.shopping_concierge.agents import AgentStatus, ProductResearchAgent
+from tests.fixtures.mock_data import get_mock_shopping_criteria
 
 
 @pytest.mark.unit
@@ -24,9 +24,7 @@ class TestProductResearchAgent:
         assert agent.role.value == "product_research"
         assert len(agent.tools) > 0
 
-    async def test_process_valid_criteria(
-        self, agent: ProductResearchAgent
-    ) -> None:
+    async def test_process_valid_criteria(self, agent: ProductResearchAgent) -> None:
         """Test processing valid shopping criteria."""
         with patch.object(
             agent,
@@ -45,9 +43,7 @@ class TestProductResearchAgent:
             assert "result_count" in response.output
             assert isinstance(response.output["products"], list)
 
-    async def test_extract_search_params(
-        self, agent: ProductResearchAgent
-    ) -> None:
+    async def test_extract_search_params(self, agent: ProductResearchAgent) -> None:
         """Test extracting search parameters from criteria."""
         criteria = get_mock_shopping_criteria()
         params = agent._extract_search_params(criteria)
@@ -57,18 +53,14 @@ class TestProductResearchAgent:
         assert params["category"] == "running shoes"
         assert params["max_price"] == 150
 
-    async def test_process_without_criteria(
-        self, agent: ProductResearchAgent
-    ) -> None:
+    async def test_process_without_criteria(self, agent: ProductResearchAgent) -> None:
         """Test processing without criteria raises error."""
         input_data = {}
 
         with pytest.raises(ValueError, match="must contain 'shopping_criteria'"):
             await agent.process(input_data)
 
-    async def test_process_invalid_criteria_type(
-        self, agent: ProductResearchAgent
-    ) -> None:
+    async def test_process_invalid_criteria_type(self, agent: ProductResearchAgent) -> None:
         """Test processing with invalid criteria type."""
         input_data = {"shopping_criteria": "invalid"}
 
@@ -105,9 +97,7 @@ class TestProductResearchAgent:
             assert response.status == AgentStatus.COMPLETED
             assert len(response.output["products"]) <= 2
 
-    async def test_analyze_results_no_products(
-        self, agent: ProductResearchAgent
-    ) -> None:
+    async def test_analyze_results_no_products(self, agent: ProductResearchAgent) -> None:
         """Test analyzing empty results."""
         criteria = get_mock_shopping_criteria()
         products = []
@@ -116,9 +106,7 @@ class TestProductResearchAgent:
 
         assert "no products" in analysis.lower()
 
-    async def test_process_handles_tool_error(
-        self, agent: ProductResearchAgent
-    ) -> None:
+    async def test_process_handles_tool_error(self, agent: ProductResearchAgent) -> None:
         """Test handling tool execution errors."""
         with patch.object(
             agent,
