@@ -1,0 +1,17 @@
+[flake8]
+max-line-length = 100
+extend-ignore = E203, W503
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    .venv,
+    venv,
+    *.egg-info,
+    .pytest_cache,
+    .mypy_cache,
+    src/shopping_concierge/prompts/templates.py
+per-file-ignores =
+    # Ignore line length in prompt template strings
+    src/shopping_concierge/prompts/templates.py:E501
